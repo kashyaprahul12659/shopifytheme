@@ -46,7 +46,7 @@
     {{ 'custom.css' | asset_url | stylesheet_tag }}
 
     <!-- Theme JS -->
-    {{ 'theme.js' | asset_url | script_tag: defer: true }}
+    {{ 'theme.js' | asset_url | script_tag }}
 
     <!-- Shopify-specific -->
     {{ content_for_header }}
