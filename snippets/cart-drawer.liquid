@@ -1,0 +1,86 @@
+<div class="cart-drawer__header">
+  <h2 class="cart-drawer__title">{{ 'sections.cart.title' | t }}</h2>
+  <button type="button" class="cart-drawer__close js-cart-drawer-close">
+    <span class="sr-only">{{ 'sections.cart.close' | t }}</span>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</div>
+
+<div class="cart-drawer__content js-cart-drawer-content">
+  {% if cart.item_count == 0 %}
+    <div class="cart-drawer__empty">
+      <p>{{ 'sections.cart.empty' | t }}</p>
+      <p><a href="/collections/all" class="btn btn--secondary">{{ 'general.search.close' | t }}</a></p>
+    </div>
+  {% else %}
+    <div class="cart-drawer__items">
+      {%- for item in cart.items -%}
+        <div class="cart-item" data-id="{{ item.id }}">
+          <div class="cart-item__image-wrapper">
+            {% if item.image != blank %}
+              <img src="{{ item.image | image_url: width: 80 }}" alt="{{ item.title | escape }}" class="cart-item__image" loading="lazy" width="80">
+            {% else %}
+              {{ 'product-placeholder' | placeholder_svg_tag: 'cart-item__image placeholder-svg' }}
+            {% endif %}
+          </div>
+          <div class="cart-item__details">
+            <h4 class="cart-item__title">{{ item.title | escape }}</h4>
+            {% if item.variant_title != 'Default Title' %}
+              <p class="cart-item__variant">{{ item.variant_title | escape }}</p>
+            {% endif %}
+            <div class="cart-item__price-quantity">
+              <div class="cart-item__quantity js-quantity-selector">
+                <button type="button" class="cart-item__quantity-btn js-quantity-decrease">-</button>
+                <input type="number" class="cart-item__quantity-input js-quantity-input" value="{{ item.quantity }}" min="1" data-id="{{ item.id }}">
+                <button type="button" class="cart-item__quantity-btn js-quantity-increase">+</button>
+              </div>
+              <div class="cart-item__price">{{ item.final_line_price | money }}</div>
+            </div>
+            <button type="button" class="cart-item__remove js-remove-item" data-id="{{ item.id }}">
+              {{ 'sections.cart.remove_title' | t: title: item.title }}
+            </button>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {% endif %}
+</div>
+
+<div class="cart-drawer__footer js-cart-drawer-footer">
+  <div class="cart-drawer__subtotal">
+    <span>{{ 'sections.cart.subtotal' | t }}</span>
+    <span>{{ cart.total_price | money }}</span>
+  </div>
+  <div class="cart-drawer__buttons">
+    <a href="/checkout" class="btn">{{ 'sections.cart.checkout' | t }}</a>
+    <button type="button" class="btn btn--secondary js-cart-drawer-close">
+      {{ 'general.search.close' | t }}
+    </button>
+  </div>
+</div>
+
+<div class="cart-drawer__trust-badges">
+  <h4 class="cart-drawer__trust-badges-title">{{ 'sections.trust_badges.title' | t }}</h4>
+  <div class="cart-drawer__trust-badges-grid">
+    <div class="cart-drawer__trust-badge">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="cart-drawer__trust-badge">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 16V3H1V16H16ZM16 16H23V10L20 7H16V16ZM7 20H11M3 20H7M11 20H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5 20C5 21.1046 4.10457 22 3 22C1.89543 22 1 21.1046 1 20C1 18.8954 1.89543 18 3 18C4.10457 18 5 18.8954 5 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13 20C13 21.1046 12.1046 22 11 22C9.89543 22 9 21.1046 9 20C9 18.8954 9.89543 18 11 18C12.1046 18 13 18.8954 13 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="cart-drawer__trust-badge">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 10H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</div>

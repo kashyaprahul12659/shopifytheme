@@ -1,0 +1,385 @@
+<div class="featured-product">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <div class="featured-product__header">
+        <h2 class="featured-product__title">{{ section.settings.title }}</h2>
+        {% if section.settings.subtitle != blank %}
+          <div class="featured-product__subtitle">{{ section.settings.subtitle }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    {%- assign product = all_products[section.settings.product] -%}
+    
+    {% if product != blank %}
+      <div class="featured-product__grid">
+        <div class="featured-product__gallery js-product-gallery">
+          {% if product.featured_image != blank %}
+            {{ product.featured_image | image_url: width: 1000 | image_tag: 
+              class: "featured-product__image js-main-image",
+              alt: product.featured_image.alt | default: product.title,
+              loading: "lazy"
+            }}
+          {% else %}
+            {{ 'product-placeholder' | placeholder_svg_tag: 'featured-product__image placeholder-svg' }}
+          {% endif %}
+          
+          {% if product.images.size > 1 %}
+            <div class="featured-product__thumbnails">
+              {% for image in product.images limit: 4 %}
+                <img 
+                  src="{{ image.src | img_url: '120x' }}" 
+                  alt="{{ image.alt | default: product.title }}" 
+                  class="featured-product__thumbnail js-thumbnail {% if forloop.first %}active{% endif %}" 
+                  data-fullsize="{{ image.src | img_url: '1000x' }}" 
+                  loading="lazy"
+                  width="60"
+                  height="60"
+                >
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="featured-product__info">
+          <h2 class="featured-product__title">{{ product.title }}</h2>
+          
+          <div class="featured-product__price">
+            {% if product.price < product.compare_at_price %}
+              <span class="featured-product__sale-price">{{ product.price | money }}</span>
+              <span class="featured-product__price-compare">{{ product.compare_at_price | money }}</span>
+            {% else %}
+              <span>{{ product.price | money }}</span>
+            {% endif %}
+          </div>
+          
+          {% if product.has_only_default_variant == false %}
+            <form id="ProductForm-{{ section.id }}" method="post" action="/cart/add" class="featured-product__form js-product-form">
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              
+              <div class="featured-product__options">
+                {% for option in product.options_with_values %}
+                  <div class="featured-product__option">
+                    <label class="featured-product__option-label">{{ option.name }}</label>
+                    
+                    <div class="featured-product__option-values">
+                      {% for value in option.values %}
+                        <input type="radio" id="{{ section.id }}-{{ option.name | handle }}-{{ value | handle }}" 
+                          name="{{ option.name }}" 
+                          value="{{ value }}" 
+                          {% if option.selected_value == value %}checked{% endif %}
+                          class="featured-product__option-input"
+                        >
+                        <label for="{{ section.id }}-{{ option.name | handle }}-{{ value | handle }}" 
+                          class="featured-product__option-value">
+                          {{ value }}
+                        </label>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+              
+              {% if product.available %}
+                {% if product.selected_or_first_available_variant.inventory_management == 'shopify' and product.selected_or_first_available_variant.inventory_quantity > 0 and product.selected_or_first_available_variant.inventory_quantity <= section.settings.inventory_notice_threshold %}
+                  <div class="featured-product__inventory">
+                    {{ 'sections.featured_product.inventory_low' | t: count: product.selected_or_first_available_variant.inventory_quantity }}
+                  </div>
+                {% endif %}
+                
+                <div class="featured-product__quantity">
+                  <label for="Quantity-{{ section.id }}" class="featured-product__quantity-label">{{ 'sections.featured_product.quantity' | t }}</label>
+                  <div class="quantity-input js-quantity-selector">
+                    <button type="button" class="quantity-btn js-quantity-decrease">-</button>
+                    <input type="number" 
+                      id="Quantity-{{ section.id }}"
+                      name="quantity" 
+                      value="1" 
+                      min="1" 
+                      class="quantity-number js-quantity-input" 
+                      aria-label="{{ 'products.product.quantity.input_label' | t: product: product.title }}"
+                    >
+                    <button type="button" class="quantity-btn js-quantity-increase">+</button>
+                  </div>
+                </div>
+                
+                <div class="featured-product__buttons">
+                  <button type="submit" 
+                    class="btn featured-product__add-to-cart"
+                    {% unless product.available %}disabled{% endunless %}
+                  >
+                    {% if product.available %}
+                      {{ 'sections.featured_product.add_to_cart' | t }}
+                    {% else %}
+                      {{ 'sections.featured_product.sold_out' | t }}
+                    {% endif %}
+                  </button>
+                  
+                  {% if section.settings.show_view_product %}
+                    <a href="{{ product.url }}" class="btn btn--secondary">
+                      {{ 'products.product.view_full_details' | t }}
+                    </a>
+                  {% endif %}
+                </div>
+              {% else %}
+                <div class="featured-product__sold-out">
+                  {{ 'sections.featured_product.sold_out' | t }}
+                </div>
+              {% endif %}
+            </form>
+          {% else %}
+            <form id="ProductForm-{{ section.id }}" method="post" action="/cart/add" class="featured-product__form js-product-form">
+              <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+              
+              {% if product.available %}
+                {% if product.variants.first.inventory_management == 'shopify' and product.variants.first.inventory_quantity > 0 and product.variants.first.inventory_quantity <= section.settings.inventory_notice_threshold %}
+                  <div class="featured-product__inventory">
+                    {{ 'sections.featured_product.inventory_low' | t: count: product.variants.first.inventory_quantity }}
+                  </div>
+                {% endif %}
+                
+                <div class="featured-product__quantity">
+                  <label for="Quantity-{{ section.id }}" class="featured-product__quantity-label">{{ 'sections.featured_product.quantity' | t }}</label>
+                  <div class="quantity-input js-quantity-selector">
+                    <button type="button" class="quantity-btn js-quantity-decrease">-</button>
+                    <input type="number" 
+                      id="Quantity-{{ section.id }}"
+                      name="quantity" 
+                      value="1" 
+                      min="1" 
+                      class="quantity-number js-quantity-input" 
+                      aria-label="{{ 'products.product.quantity.input_label' | t: product: product.title }}"
+                    >
+                    <button type="button" class="quantity-btn js-quantity-increase">+</button>
+                  </div>
+                </div>
+                
+                <div class="featured-product__buttons">
+                  <button type="submit" 
+                    class="btn featured-product__add-to-cart"
+                    {% unless product.available %}disabled{% endunless %}
+                  >
+                    {% if product.available %}
+                      {{ 'sections.featured_product.add_to_cart' | t }}
+                    {% else %}
+                      {{ 'sections.featured_product.sold_out' | t }}
+                    {% endif %}
+                  </button>
+                  
+                  {% if section.settings.show_view_product %}
+                    <a href="{{ product.url }}" class="btn btn--secondary">
+                      {{ 'products.product.view_full_details' | t }}
+                    </a>
+                  {% endif %}
+                </div>
+              {% else %}
+                <div class="featured-product__sold-out">
+                  {{ 'sections.featured_product.sold_out' | t }}
+                </div>
+              {% endif %}
+            </form>
+          {% endif %}
+          
+          {% if section.settings.show_rating and product.metafields.reviews.rating.value != blank %}
+            <div class="featured-product__rating">
+              <span class="featured-product__stars">★★★★★</span>
+              <span class="featured-product__rating-value">{{ product.metafields.reviews.rating.value }} / 5</span>
+            </div>
+          {% endif %}
+          
+          {% if section.settings.show_description and product.description != blank %}
+            <div class="featured-product__description">
+              {{ product.description | truncatewords: 30 }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="featured-product__placeholder">
+        <div class="placeholder">
+          {{ 'product-placeholder' | placeholder_svg_tag: 'featured-product__image placeholder-svg' }}
+        </div>
+        <div class="placeholder-text">
+          <h2 class="placeholder-title">{{ 'products.product.title' | t }}</h2>
+          <div class="placeholder-price">{{ 1999 | money }}</div>
+          <div class="placeholder-description">
+            {{ 'products.product.description' | t }}
+          </div>
+          <button class="btn placeholder-button" disabled>
+            {{ 'sections.featured_product.add_to_cart' | t }}
+          </button>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Product",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Featured Product",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subheading"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": true,
+      "label": "Show product rating"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "default": true,
+      "label": "Show product description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_product",
+      "default": true,
+      "label": "Show 'View full details' button"
+    },
+    {
+      "type": "range",
+      "id": "inventory_notice_threshold",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "label": "Low inventory threshold"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Product",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .featured-product__header {
+    text-align: center;
+    margin-bottom: var(--spacing-large);
+  }
+  
+  .featured-product__subtitle {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .featured-product__inventory {
+    color: #e74c3c;
+    font-weight: 500;
+    margin-bottom: var(--spacing-medium);
+  }
+  
+  .featured-product__option {
+    margin-bottom: var(--spacing-medium);
+  }
+  
+  .featured-product__option-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: var(--spacing-small);
+  }
+  
+  .featured-product__option-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-small);
+  }
+  
+  .featured-product__option-input {
+    position: absolute;
+    opacity: 0;
+  }
+  
+  .featured-product__option-value {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    cursor: pointer;
+    transition: var(--transition-short);
+  }
+  
+  .featured-product__option-input:checked + .featured-product__option-value {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+  
+  .featured-product__option-input:focus + .featured-product__option-value {
+    box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.3);
+  }
+  
+  .featured-product__quantity-label {
+    display: block;
+    margin-bottom: var(--spacing-small);
+    font-weight: 600;
+  }
+  
+  .featured-product__buttons {
+    margin-top: var(--spacing-medium);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-small);
+  }
+  
+  @media (min-width: 480px) {
+    .featured-product__buttons {
+      flex-direction: row;
+    }
+  }
+  
+  .featured-product__description {
+    margin-top: var(--spacing-large);
+    line-height: 1.8;
+  }
+  
+  .featured-product__rating {
+    margin-top: var(--spacing-medium);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-small);
+  }
+  
+  .featured-product__stars {
+    color: gold;
+    letter-spacing: 2px;
+  }
+  
+  /* Placeholder styles */
+  .featured-product__placeholder {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-large);
+  }
+  
+  @media (min-width: 768px) {
+    .featured-product__placeholder {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .placeholder-text > * {
+    margin-bottom: var(--spacing-medium);
+  }
+</style>

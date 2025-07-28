@@ -1,0 +1,143 @@
+<div class="about-us">
+  <div class="container">
+    <div class="about-us__grid">
+      {% if section.settings.image_position == 'left' %}
+        <div class="about-us__image-wrapper">
+          {% if section.settings.image != blank %}
+            {{ section.settings.image | image_url: width: 1000 | image_tag: 
+              class: "about-us__image",
+              alt: section.settings.heading | default: section.settings.image.alt,
+              loading: "lazy"
+            }}
+          {% else %}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'about-us__image placeholder-svg' }}
+          {% endif %}
+        </div>
+      {% endif %}
+      
+      <div class="about-us__content">
+        {% if section.settings.heading != blank %}
+          <h2 class="about-us__title">{{ section.settings.heading }}</h2>
+        {% endif %}
+        
+        {% if section.settings.text != blank %}
+          <div class="about-us__text">{{ section.settings.text }}</div>
+        {% endif %}
+        
+        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+          <a href="{{ section.settings.button_link }}" class="btn">
+            {{ section.settings.button_label }}
+          </a>
+        {% endif %}
+      </div>
+      
+      {% if section.settings.image_position == 'right' %}
+        <div class="about-us__image-wrapper">
+          {% if section.settings.image != blank %}
+            {{ section.settings.image | image_url: width: 1000 | image_tag: 
+              class: "about-us__image",
+              alt: section.settings.heading | default: section.settings.image.alt,
+              loading: "lazy"
+            }}
+          {% else %}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'about-us__image placeholder-svg' }}
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "About Us Highlight",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Our Story",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "default": "<p>Share your brand story and highlight your values. Connect with your customers on a deeper level by telling them about your brand's history and what makes your jewelry special.</p>",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "label": "Image position"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Read More",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Us Highlight",
+      "category": "Text"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .about-us__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-large);
+  }
+  
+  @media (min-width: 768px) {
+    .about-us__grid {
+      grid-template-columns: repeat(2, 1fr);
+      align-items: center;
+    }
+  }
+  
+  .about-us__image-wrapper {
+    height: 100%;
+  }
+  
+  .about-us__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .about-us__title {
+    margin-bottom: var(--spacing-medium);
+  }
+  
+  .about-us__text {
+    margin-bottom: var(--spacing-medium);
+    line-height: 1.8;
+  }
+</style>

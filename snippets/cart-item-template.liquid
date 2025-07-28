@@ -1,0 +1,21 @@
+<!-- This is a template for cart items used by JavaScript -->
+<template id="CartItemTemplate">
+  <div class="cart-item" data-id="{ID}">
+    <div class="cart-item__image-wrapper">
+      <img src="{IMAGE}" alt="{TITLE}" class="cart-item__image" loading="lazy" width="80">
+    </div>
+    <div class="cart-item__details">
+      <h4 class="cart-item__title">{TITLE}</h4>
+      <p class="cart-item__variant">{VARIANT}</p>
+      <div class="cart-item__price-quantity">
+        <div class="cart-item__quantity js-quantity-selector">
+          <button type="button" class="cart-item__quantity-btn js-quantity-decrease">-</button>
+          <input type="number" class="cart-item__quantity-input js-quantity-input" value="{QUANTITY}" min="1" data-id="{ID}">
+          <button type="button" class="cart-item__quantity-btn js-quantity-increase">+</button>
+        </div>
+        <div class="cart-item__price">{PRICE}</div>
+      </div>
+      <button type="button" class="cart-item__remove js-remove-item" data-id="{ID}">Remove</button>
+    </div>
+  </div>
+</template>

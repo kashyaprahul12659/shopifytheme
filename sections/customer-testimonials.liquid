@@ -1,0 +1,138 @@
+<div class="testimonials">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <div class="testimonials__header">
+        <h2 class="testimonials__title">{{ section.settings.title }}</h2>
+        {% if section.settings.subtitle != blank %}
+          <div class="testimonials__subtitle">{{ section.settings.subtitle }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    <div class="testimonials__slider js-testimonial-slider">
+      <div class="testimonials__container">
+        {% for block in section.blocks %}
+          <div class="testimonial-item" {{ block.shopify_attributes }}>
+            <div class="testimonial-item__content">
+              <div class="testimonial-item__quote">
+                {{ block.settings.quote }}
+              </div>
+              
+              <div class="testimonial-item__rating">
+                {% render 'icon-stars', rating: block.settings.rating %}
+              </div>
+              
+              <div class="testimonial-item__author">{{ block.settings.author }}</div>
+              
+              {% if section.settings.show_verified_badge %}
+                <div class="testimonial-item__verified">
+                  {{ 'sections.testimonials.verified_buyer' | t }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+      <div class="testimonials__controls">
+        <button type="button" class="testimonials__control js-testimonial-prev">
+          <span class="sr-only">{{ 'sections.testimonials.previous' | t }}</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button type="button" class="testimonials__control js-testimonial-next">
+          <span class="sr-only">{{ 'sections.testimonials.next' | t }}</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 13L11 8L6 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer Testimonials",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "What Our Customers Say",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subheading"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_verified_badge",
+      "default": true,
+      "label": "Show verified buyer badge"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Testimonial",
+      "type": "testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "default": "I absolutely love the quality and craftsmanship of my jewelry pieces. They are even more beautiful in person!",
+          "label": "Quote"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "default": "Jane Smith",
+          "label": "Author name"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Rating"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Customer Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .testimonials__header {
+    text-align: center;
+    margin-bottom: var(--spacing-large);
+  }
+  
+  .testimonials__subtitle {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+</style>

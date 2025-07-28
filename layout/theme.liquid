@@ -1,0 +1,103 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    {%- unless settings.type_header_font.system? -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    <!-- SEO Meta Tags -->
+    <meta property="og:site_name" content="{{ shop.name }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:title" content="{{ page_title }}">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="{{ page_description | escape }}">
+    {% if settings.social_image != blank %}
+      <meta property="og:image" content="{{ settings.social_image | image_url }}">
+      <meta property="og:image:secure_url" content="{{ settings.social_image | image_url }}">
+    {% endif %}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ page_title }}">
+    <meta name="twitter:description" content="{{ page_description | escape }}">
+
+    <!-- Theme CSS -->
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ 'custom.css' | asset_url | stylesheet_tag }}
+
+    <!-- Theme JS -->
+    {{ 'theme.js' | asset_url | script_tag: defer: true }}
+
+    <!-- Shopify-specific -->
+    {{ content_for_header }}
+
+    <script>
+      // Add a class to indicate when JS is available
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+
+    <!-- Structured data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "{{ shop.name }}",
+      "url": "{{ shop.url }}",
+      {% if settings.share_image %}
+        "logo": "{{ settings.share_image | image_url }}",
+      {% endif %}
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "{{ settings.phone_number | default: '1-800-000-0000' }}",
+          "contactType": "customer service"
+        }
+      ]
+    }
+    </script>
+  </head>
+
+  <body class="body-{{ template | handle }}">
+    <a class="skip-to-content-link sr-only" href="#MainContent">
+      {{ "accessibility.skip_to_content" | t }}
+    </a>
+
+    {% section 'announcement-bar' %}
+    {% section 'header' %}
+
+    <main id="MainContent" class="content-for-layout" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% section 'footer' %}
+
+    <!-- Cart drawer container -->
+    <div id="CartDrawer" class="cart-drawer">
+      {% render 'cart-drawer' %}
+    </div>
+    <div id="CartDrawerOverlay" class="cart-drawer-overlay"></div>
+
+    <!-- JS Template for cart items -->
+    {% render 'cart-item-template' %}
+  </body>
+</html>

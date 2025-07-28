@@ -1,0 +1,114 @@
+<div class="cta-banner" style="background-color: {{ section.settings.background_color }};">
+  {% if section.settings.image != blank %}
+    {{ section.settings.image | image_url: width: 2000 | image_tag: 
+      class: "cta-banner__image",
+      loading: "lazy",
+      alt: ""
+    }}
+  {% endif %}
+  
+  <div class="container">
+    <div class="cta-banner__content">
+      {% if section.settings.title != blank %}
+        <h2 class="cta-banner__title">{{ section.settings.title }}</h2>
+      {% endif %}
+      
+      {% if section.settings.subtitle != blank %}
+        <div class="cta-banner__subtitle">{{ section.settings.subtitle }}</div>
+      {% endif %}
+      
+      {% if section.settings.button_label != blank %}
+        <a href="{{ section.settings.button_link | default: '#' }}" class="btn cta-banner__button">
+          {{ section.settings.button_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "CTA Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Join Our Exclusive Collection",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "default": "<p>Sign up to receive early access to new arrivals and special offers.</p>",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Shop Now",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "default": "#1a1a1a",
+      "label": "Background color"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CTA Banner",
+      "category": "Promotional"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .cta-banner {
+    padding: var(--spacing-extra-large) 0;
+    position: relative;
+    color: white;
+  }
+  
+  .cta-banner__content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .cta-banner__title {
+    font-size: 3.6rem;
+    margin-bottom: var(--spacing-medium);
+  }
+  
+  .cta-banner__subtitle {
+    font-size: 1.8rem;
+    margin-bottom: var(--spacing-large);
+  }
+  
+  .cta-banner__button {
+    background-color: white;
+    color: var(--color-primary);
+  }
+  
+  .cta-banner__button:hover {
+    background-color: var(--color-accent);
+    color: white;
+    border-color: var(--color-accent);
+  }
+</style>

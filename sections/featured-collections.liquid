@@ -1,0 +1,203 @@
+<div class="featured-collections">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <div class="featured-collections__header">
+        <h2 class="featured-collections__title">{{ section.settings.title }}</h2>
+        {% if section.settings.subtitle != blank %}
+          <div class="featured-collections__subtitle">{{ section.settings.subtitle }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    <div class="featured-collections__grid" 
+      style="--grid-column-count: {{ section.settings.columns_desktop }}; 
+             --grid-column-count-mobile: {{ section.settings.columns_mobile }};">
+      {% for block in section.blocks %}
+        {% assign collection = collections[block.settings.collection] %}
+        {% if collection != blank %}
+          <div class="featured-collection-item" {{ block.shopify_attributes }}>
+            <a href="{{ collection.url }}" class="featured-collection-item__link">
+              {% if collection.image != blank %}
+                {{ collection.image | image_url: width: 600 | image_tag: 
+                  class: "featured-collection-item__image",
+                  alt: collection.title,
+                  loading: "lazy"
+                }}
+              {% elsif collection.products.first and collection.products.first.featured_image != blank %}
+                {{ collection.products.first.featured_image | image_url: width: 600 | image_tag: 
+                  class: "featured-collection-item__image",
+                  alt: collection.title,
+                  loading: "lazy"
+                }}
+              {% else %}
+                {{ 'collection-placeholder.svg' | asset_url | image_tag: 
+                  class: "featured-collection-item__image",
+                  alt: collection.title,
+                  loading: "lazy"
+                }}
+              {% endif %}
+              
+              <div class="featured-collection-item__overlay">
+                <h3 class="featured-collection-item__title">{{ collection.title }}</h3>
+                {% if block.settings.show_product_count %}
+                  <div class="featured-collection-item__count">{{ collection.products_count }} products</div>
+                {% endif %}
+                <span class="featured-collection-item__link-text">{{ 'sections.featured_collections.view_all' | t }}</span>
+              </div>
+            </a>
+          </div>
+        {% else %}
+          <div class="featured-collection-item placeholder" {{ block.shopify_attributes }}>
+            <div class="featured-collection-item__placeholder">
+              {{ 'collection-placeholder' | placeholder_svg_tag: 'featured-collection-item__image placeholder-svg' }}
+            </div>
+            <div class="featured-collection-item__overlay">
+              <h3 class="featured-collection-item__title">{{ 'collections.general.collection_label' | t }}</h3>
+              <span class="featured-collection-item__link-text">{{ 'sections.featured_collections.view_all' | t }}</span>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+    {% if section.settings.show_view_all and section.settings.view_all_link != blank %}
+      <div class="featured-collections__view-all">
+        <a href="{{ section.settings.view_all_link }}" class="btn">{{ section.settings.view_all_text }}</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Featured Collections",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subheading"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Number of columns on desktop"
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "min": 1,
+      "max": 2,
+      "step": 1,
+      "default": 1,
+      "label": "Number of columns on mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": false,
+      "label": "Show 'View all' button"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "default": "View All Collections",
+      "label": "'View all' button text"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "'View all' button link"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Collection",
+      "type": "collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_product_count",
+          "default": true,
+          "label": "Show product count"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Featured Collections",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .featured-collections {
+    padding: var(--spacing-extra-large) 0;
+  }
+  
+  .featured-collections__header {
+    text-align: center;
+    margin-bottom: var(--spacing-large);
+  }
+  
+  .featured-collections__title {
+    margin-bottom: var(--spacing-small);
+  }
+  
+  .featured-collections__subtitle {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .featured-collections__grid {
+    display: grid;
+    gap: var(--spacing-medium);
+  }
+  
+  @media (min-width: 768px) {
+    .featured-collections__grid {
+      grid-template-columns: repeat(var(--grid-column-count), 1fr);
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .featured-collections__grid {
+      grid-template-columns: repeat(var(--grid-column-count-mobile), 1fr);
+    }
+  }
+  
+  .featured-collections__view-all {
+    margin-top: var(--spacing-large);
+    text-align: center;
+  }
+</style>

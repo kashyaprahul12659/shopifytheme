@@ -1,0 +1,178 @@
+{
+  "sections": {
+    "hero_banner": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Exquisite Silver Jewelry",
+        "subheading": "<p>Handcrafted with passion and precision.</p>",
+        "button_label": "Shop Now",
+        "button_link": "/collections/all",
+        "text_align": "center",
+        "overlay_opacity": 40,
+        "height": 80
+      }
+    },
+    "featured_collections": {
+      "type": "featured-collections",
+      "blocks": {
+        "collection-1": {
+          "type": "collection",
+          "settings": {
+            "show_product_count": true
+          }
+        },
+        "collection-2": {
+          "type": "collection",
+          "settings": {
+            "show_product_count": true
+          }
+        },
+        "collection-3": {
+          "type": "collection",
+          "settings": {
+            "show_product_count": true
+          }
+        }
+      },
+      "block_order": [
+        "collection-1",
+        "collection-2",
+        "collection-3"
+      ],
+      "settings": {
+        "title": "Our Collections",
+        "subtitle": "<p>Explore our carefully curated collections of premium silver jewelry.</p>",
+        "columns_desktop": 3,
+        "columns_mobile": 1,
+        "show_view_all": true,
+        "view_all_text": "View All Collections",
+        "view_all_link": "/collections"
+      }
+    },
+    "about_us": {
+      "type": "about-us-highlight",
+      "settings": {
+        "heading": "Our Story",
+        "text": "<p>ShreeRamPremium was founded with a passion for exquisite silver jewelry craftsmanship. Our artisans blend traditional techniques with modern designs to create timeless pieces that elevate your style. Each piece in our collection is meticulously handcrafted with premium 925 sterling silver.</p><p>We believe in creating jewelry that celebrates both beauty and quality, pieces that can be cherished for generations.</p>",
+        "button_label": "Learn More",
+        "button_link": "/pages/about-us",
+        "image_position": "right"
+      }
+    },
+    "featured_product": {
+      "type": "featured-product",
+      "settings": {
+        "title": "Featured Product",
+        "subtitle": "<p>Our most popular piece this season.</p>",
+        "show_rating": true,
+        "show_description": true,
+        "show_view_product": true,
+        "inventory_notice_threshold": 5
+      }
+    },
+    "testimonials": {
+      "type": "customer-testimonials",
+      "blocks": {
+        "testimonial-1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "I absolutely love the quality and craftsmanship of my jewelry pieces. They are even more beautiful in person!",
+            "author": "Jane Smith",
+            "rating": 5
+          }
+        },
+        "testimonial-2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The attention to detail is amazing. I receive compliments every time I wear my ShreeRamPremium necklace.",
+            "author": "Michael Johnson",
+            "rating": 5
+          }
+        },
+        "testimonial-3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Fast shipping and the packaging was beautiful. Perfect for gifting. Will definitely order again!",
+            "author": "Sarah Williams",
+            "rating": 4
+          }
+        }
+      },
+      "block_order": [
+        "testimonial-1",
+        "testimonial-2",
+        "testimonial-3"
+      ],
+      "settings": {
+        "title": "What Our Customers Say",
+        "subtitle": "<p>Don't just take our word for it - hear from our satisfied customers.</p>",
+        "show_verified_badge": true
+      }
+    },
+    "trust_badges": {
+      "type": "trust-badges",
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "title": "100% Authentic Silver",
+            "text": "All our products are made with genuine 925 sterling silver"
+          }
+        },
+        "badge-2": {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free Shipping",
+            "text": "Enjoy free shipping on all orders over $100"
+          }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": {
+            "icon": "returns",
+            "title": "30-Day Returns",
+            "text": "Not completely satisfied? Return within 30 days"
+          }
+        },
+        "badge-4": {
+          "type": "badge",
+          "settings": {
+            "icon": "payment",
+            "title": "Secure Payments",
+            "text": "Shop with confidence using secure payment methods"
+          }
+        }
+      },
+      "block_order": [
+        "badge-1",
+        "badge-2",
+        "badge-3",
+        "badge-4"
+      ],
+      "settings": {
+        "title": "Shop with Confidence"
+      }
+    },
+    "cta_banner": {
+      "type": "cta-banner",
+      "settings": {
+        "title": "Join Our Exclusive Collection",
+        "subtitle": "<p>Sign up to receive early access to new arrivals and special offers.</p>",
+        "button_label": "Shop Now",
+        "button_link": "/collections/all",
+        "background_color": "#1a1a1a"
+      }
+    }
+  },
+  "order": [
+    "hero_banner",
+    "featured_collections",
+    "about_us",
+    "featured_product",
+    "testimonials",
+    "trust_badges",
+    "cta_banner"
+  ]
+}

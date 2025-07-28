@@ -1,0 +1,132 @@
+<div class="hero-banner">
+  {% if section.settings.image != blank %}
+    {{ section.settings.image | image_url: width: 2000 | image_tag: 
+      class: "hero-banner__image",
+      loading: "eager",
+      alt: section.settings.heading | default: section.settings.image.alt | default: shop.name,
+      sizes: "100vw"
+    }}
+  {% endif %}
+  
+  <div class="hero-banner__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+  
+  <div class="container">
+    <div class="hero-banner__content">
+      {% if section.settings.heading != blank %}
+        <h1 class="hero-banner__title">{{ section.settings.heading }}</h1>
+      {% endif %}
+      
+      {% if section.settings.subheading != blank %}
+        <div class="hero-banner__subtitle">{{ section.settings.subheading }}</div>
+      {% endif %}
+      
+      {% if section.settings.button_label != blank %}
+        <a href="{{ section.settings.button_link | default: '#' }}" class="btn hero-banner__button">
+          {{ section.settings.button_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 40,
+      "unit": "%",
+      "label": "Overlay opacity"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Exquisite Silver Jewelry",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "default": "<p>Handcrafted with attention to detail</p>",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Shop Now",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center",
+      "label": "Text alignment"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "min": 50,
+      "max": 100,
+      "step": 10,
+      "default": 80,
+      "unit": "vh",
+      "label": "Banner height"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Hero Section"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .hero-banner {
+    height: {{ section.settings.height }}vh;
+    min-height: 500px;
+  }
+  
+  .hero-banner__content {
+    text-align: {{ section.settings.text_align }};
+    {% if section.settings.text_align == 'left' %}
+    margin-left: 0;
+    margin-right: auto;
+    {% elsif section.settings.text_align == 'right' %}
+    margin-left: auto;
+    margin-right: 0;
+    {% endif %}
+  }
+</style>

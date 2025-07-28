@@ -1,0 +1,31 @@
+{% assign rating = rating | default: 0 %}
+
+<div class="stars">
+  {% for i in (1..5) %}
+    {% if i <= rating %}
+      <span class="stars__star stars__star--filled">★</span>
+    {% else %}
+      <span class="stars__star stars__star--empty">☆</span>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<style>
+  .stars {
+    display: inline-flex;
+    color: gold;
+    font-size: 1.6rem;
+  }
+  
+  .stars__star {
+    margin-right: 2px;
+  }
+  
+  .stars__star--filled {
+    color: gold;
+  }
+  
+  .stars__star--empty {
+    color: #e0e0e0;
+  }
+</style>

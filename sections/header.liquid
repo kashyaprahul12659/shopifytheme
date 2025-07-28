@@ -1,0 +1,265 @@
+<div class="site-header js-header">
+  <div class="container">
+    <div class="header__content">
+      <div class="header__logo">
+        {% if section.settings.logo != blank %}
+          <a href="/" class="header__logo-link">
+            {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
+            {%- assign logo_height = section.settings.logo_height | default: 80 -%}
+            {%- assign logo_width = section.settings.logo.width | times: logo_height | divided_by: section.settings.logo.height -%}
+            
+            {{ section.settings.logo | image_url: width: 180 | image_tag: 
+              class: "header__logo-image",
+              widths: "50, 100, 150, 200, 250, 300, 400, 500",
+              height: logo_height,
+              width: logo_width,
+              alt: logo_alt,
+              loading: "eager"
+            }}
+          </a>
+        {% else %}
+          <a href="/" class="header__logo-link header__logo-text">{{ shop.name }}</a>
+        {% endif %}
+      </div>
+
+      <div class="navigation__wrapper">
+        <nav class="navigation" role="navigation">
+          <ul class="navigation__list">
+            {% for link in section.settings.menu.links %}
+              <li class="navigation__list-item">
+                <a href="{{ link.url }}" class="navigation__link">{{ link.title }}</a>
+                
+                {% if link.links.size > 0 %}
+                  <ul class="navigation__dropdown">
+                    {% for childlink in link.links %}
+                      <li class="navigation__dropdown-item">
+                        <a href="{{ childlink.url }}" class="navigation__dropdown-link">{{ childlink.title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+      </div>
+
+      <div class="header__actions">
+        <a href="/search" class="header__icon-link">
+          <span class="sr-only">Search</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 19L13.8033 13.8033M13.8033 13.8033C15.1605 12.4461 16 10.5711 16 8.5C16 4.35786 12.6421 1 8.5 1C4.35786 1 1 4.35786 1 8.5C1 12.6421 4.35786 16 8.5 16C10.5711 16 12.4461 15.1605 13.8033 13.8033Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        
+        <a href="/account" class="header__icon-link">
+          <span class="sr-only">Account</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.6668 17.5V15.8333C16.6668 14.9493 16.3156 14.1014 15.6905 13.4763C15.0654 12.8512 14.2176 12.5 13.3335 12.5H6.66683C5.78277 12.5 4.93493 12.8512 4.30981 13.4763C3.68469 14.1014 3.3335 14.9493 3.3335 15.8333V17.5M13.3335 5.83333C13.3335 7.67428 11.8411 9.16667 10.0002 9.16667C8.15921 9.16667 6.66683 7.67428 6.66683 5.83333C6.66683 3.99238 8.15921 2.5 10.0002 2.5C11.8411 2.5 13.3335 3.99238 13.3335 5.83333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        
+        <button type="button" class="header__icon-link js-cart-drawer-trigger">
+          <span class="sr-only">Cart</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.66667 1.66667L3.33333 5.00001V16.6667C3.33333 17.1087 3.50893 17.5326 3.82149 17.8452C4.13405 18.1577 4.55797 18.3333 5 18.3333H15C15.442 18.3333 15.866 18.1577 16.1785 17.8452C16.4911 17.5326 16.6667 17.1087 16.6667 16.6667V5.00001L13.3333 1.66667H6.66667Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3.33333 5H16.6667" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13.3333 8.33333C13.3333 9.21739 12.9821 10.0652 12.357 10.6904C11.7319 11.3155 10.8841 11.6667 10 11.6667C9.11595 11.6667 8.26812 11.3155 7.64299 10.6904C7.01787 10.0652 6.66667 9.21739 6.66667 8.33333" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {% if cart.item_count > 0 %}
+            <span class="header__cart-count">{{ cart.item_count }}</span>
+          {% endif %}
+        </button>
+        
+        <button type="button" class="mobile-menu-toggle js-mobile-menu-toggle">
+          <span class="sr-only">Menu</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mobile-menu js-mobile-menu">
+  <div class="mobile-menu__header">
+    <div class="mobile-menu__logo">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 120 | image_tag: 
+          class: "mobile-menu__logo-image",
+          alt: shop.name
+        }}
+      {% else %}
+        <span class="mobile-menu__logo-text">{{ shop.name }}</span>
+      {% endif %}
+    </div>
+    <button type="button" class="mobile-menu__close js-mobile-menu-close">
+      <span class="sr-only">Close menu</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+  
+  <nav class="mobile-menu__navigation">
+    <ul class="mobile-menu__list">
+      {% for link in section.settings.menu.links %}
+        <li class="mobile-menu__item">
+          <a href="{{ link.url }}" class="mobile-menu__link">{{ link.title }}</a>
+          
+          {% if link.links.size > 0 %}
+            <ul class="mobile-menu__submenu">
+              {% for childlink in link.links %}
+                <li class="mobile-menu__submenu-item">
+                  <a href="{{ childlink.url }}" class="mobile-menu__submenu-link">{{ childlink.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "min": 30,
+      "max": 120,
+      "step": 5,
+      "default": 80,
+      "unit": "px",
+      "label": "Logo height"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "label": "Show account icon",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header",
+      "category": "Header"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .site-header {
+    background-color: var(--color-background);
+    padding: var(--spacing-medium) 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .site-header--scrolled {
+    background-color: var(--color-background);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  
+  .site-header--hidden {
+    transform: translateY(-100%);
+  }
+  
+  .header__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .header__logo {
+    flex: 0 0 auto;
+  }
+  
+  .header__logo-link {
+    display: block;
+  }
+  
+  .header__logo-text {
+    font-family: var(--font-heading);
+    font-size: 2.4rem;
+    font-weight: 600;
+  }
+  
+  .navigation__wrapper {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+  }
+  
+  @media (max-width: 991px) {
+    .navigation__wrapper {
+      display: none;
+    }
+  }
+  
+  .header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-medium);
+  }
+  
+  .header__icon-link {
+    position: relative;
+    color: var(--color-text);
+  }
+  
+  .header__cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--color-accent);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .mobile-menu-toggle {
+    display: none;
+  }
+  
+  @media (max-width: 991px) {
+    .mobile-menu-toggle {
+      display: block;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-left: var(--spacing-small);
+    }
+  }
+</style>

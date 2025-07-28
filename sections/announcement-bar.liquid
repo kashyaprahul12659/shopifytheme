@@ -1,0 +1,104 @@
+{% if section.settings.announcement_bar_enable %}
+  <div class="announcement-bar color-{{ section.settings.color_scheme }}">
+    <div class="container">
+      <div class="announcement-bar__content">
+        {% if section.settings.announcement_text != blank %}
+          {% if section.settings.announcement_link != blank %}
+            <a href="{{ section.settings.announcement_link }}" class="announcement-bar__link">
+              {{ section.settings.announcement_text | escape }}
+            </a>
+          {% else %}
+            <p class="announcement-bar__text">{{ section.settings.announcement_text | escape }}</p>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "announcement_bar_enable",
+      "label": "Show announcement bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Free shipping on all orders over $100"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Announcement link"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "accent",
+          "label": "Accent"
+        },
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "background",
+          "label": "Background"
+        }
+      ],
+      "default": "accent"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "category": "Promotional"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .announcement-bar {
+    padding: 10px 0;
+    text-align: center;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+    background-color: var(--color-accent);
+    color: #ffffff;
+  }
+  
+  .announcement-bar.color-accent {
+    background-color: var(--color-accent);
+    color: #ffffff;
+  }
+  
+  .announcement-bar.color-primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+  }
+  
+  .announcement-bar.color-background {
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
+  
+  .announcement-bar__link {
+    color: inherit;
+    display: block;
+    width: 100%;
+  }
+  
+  .announcement-bar__text {
+    margin: 0;
+  }
+</style>
